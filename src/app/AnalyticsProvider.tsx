@@ -1,27 +1,15 @@
 "use client"
 
+import posthog from "posthog-js"
 import { PostHogProvider } from "posthog-js/react"
-import { useMemo } from "react"
 
 import { initAnalytics } from "@/app/analytics"
 
 type AnalyticsProviderProps = React.PropsWithChildren<{
-  user: { id: string } | null
+  user: { id: string }
 }>
 
+initAnalytics()
 export function AnalyticsProvider(props: AnalyticsProviderProps) {
-  const posthog = useMemo(() => {
-    return initAnalytics(
-      props.user
-        ? {
-            bootstrap: {
-              distinctID: props.user.id,
-              isIdentifiedID: true,
-            },
-          }
-        : undefined
-    )
-  }, [props.user])
-
   return <PostHogProvider client={posthog}>{props.children}</PostHogProvider>
 }
